@@ -83,7 +83,7 @@ export default function EvaluationTextPage() {
     if (!isHydrated || syncStartedRef.current) return;
     syncStartedRef.current = true;
     void syncAnswers();
-  }, [isHydrated, syncAnswers]);
+  }, [isHydrated]);
 
   async function handleEnviar() {
     if (!isHydrated) return;
