@@ -51,7 +51,15 @@ async function proxyRequest(req: NextRequest) {
     const responseHeaders = new Headers();
 
     res.headers.forEach((value, key) => {
-      if (HOP_BY_HOP.has(key.toLowerCase())) return;
+  const lower = key.toLowerCase();
+
+  if (
+    HOP_BY_HOP.has(lower) ||
+    lower === "content-encoding" ||
+    lower === "content-length"
+  ) {
+    return;
+  }
       responseHeaders.set(key, value);
     });
 
