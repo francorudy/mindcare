@@ -112,19 +112,17 @@ export default function EvaluationAnalysisPage() {
   const [retryKey, setRetryKey] = useState(0);
 
   const runIdRef = useRef(0);
-  const routerRef = useRef(router);
-  routerRef.current = router;
 
   useEffect(() => {
     if (!isHydrated) return;
     if (!token) {
-      routerRef.current.push("/login");
+      router.push("/login");
       return;
     }
 
     const idEvaluacion = getEvalId();
     if (!idEvaluacion) {
-      routerRef.current.push("/evaluation/questions");
+      router.push("/evaluation/questions");
       return;
     }
 
@@ -162,7 +160,7 @@ export default function EvaluationAnalysisPage() {
         setProgress(100);
         setActiveStep(STEPS.length - 1);
         sessionStorage.setItem("mc_resultado", JSON.stringify(resultado));
-        routerRef.current.replace("/evaluation/results");
+        router.replace("/evaluation/results");
       } catch (err) {
         if (runId !== runIdRef.current) return;
         if (err instanceof DOMException && err.name === "AbortError") return;
