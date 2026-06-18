@@ -149,7 +149,7 @@ export default function EvaluationAnalysisPage() {
     async function execute() {
       try {
         const [resultado] = await Promise.all([
-          runProcessing(token, idEvaluacion, abort.signal).then((res) => {
+          runProcessing(token!, idEvaluacion!, abort.signal).then((res) => {
             if (runId === runIdRef.current) apiDone = true;
             return res;
           }),
