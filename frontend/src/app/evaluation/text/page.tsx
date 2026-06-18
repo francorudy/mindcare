@@ -41,7 +41,7 @@ export default function EvaluationTextPage() {
     return "Gracias por compartir. Tómate tu tiempo.";
   }, [charCount]);
 
-  const syncAnswers = useCallback(async () => {
+  const syncAnswers = async () => {
     if (!session?.token) {
       setError("Tu sesión ha expirado. Inicia sesión de nuevo.");
       setSyncing(false);
@@ -77,7 +77,7 @@ export default function EvaluationTextPage() {
     } finally {
       setSyncing(false);
     }
-  }, [router, session?.token]);
+  };
 
   useEffect(() => {
     if (!isHydrated || syncStartedRef.current) return;
