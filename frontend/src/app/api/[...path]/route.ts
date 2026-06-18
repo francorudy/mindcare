@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://127.0.0.1:8000";
+const BACKEND_URL = "https://mindcare-api-mwlv.onrender.com";
 const PROXY_TIMEOUT_MS = 45_000;
 
 const HOP_BY_HOP = new Set([
