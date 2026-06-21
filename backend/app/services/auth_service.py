@@ -11,8 +11,20 @@ from app.utils.roles import find_rol_by_name
 
 
 def _registrar_bitacora(db: Session, accion: str, id_usuario=None, detalles=None, ip=None):
-    db.add(BitacoraSistema(id_usuario=id_usuario, accion=accion, detalles=detalles, ip_origen=ip))
-    db.commit()
+    try:
+        db.add(
+            BitacoraSistema(
+                id_usuario=id_usuario,
+                accion=accion,
+                detalles=detalles,
+                ip_origen=ip
+            )
+        )
+        db.commit()
+
+    except Exception as e:
+        db.rollback()
+        print("Error al registrar bitácora:", e)
 
 
 def service_register(data: UsuarioCreate, db: Session, ip: str = None) -> Usuario:
