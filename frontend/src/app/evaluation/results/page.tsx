@@ -16,7 +16,6 @@ import {
   EVAL_CARD_PADDING,
   EVAL_CONTAINER,
   EVAL_MAIN,
-  EVAL_PAGE_BG,
 } from "../../../lib/evaluation-layout";
 import {
   PriorityAlertCard,
@@ -57,22 +56,31 @@ export default function EvaluationResultsPage() {
       return;
     }
 
+    let cancelled = false;
+
     procesamientoApi
       .obtener(authToken, Number(idRaw))
       .then((data) => {
+        if (cancelled) return;
         setResultado(data);
         sessionStorage.setItem("mc_resultado", JSON.stringify(data));
         setLoading(false);
       })
       .catch((err) => {
+        if (cancelled) return;
         setError(err instanceof ApiError ? err.message : "No se pudieron cargar los resultados.");
         setLoading(false);
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [isHydrated, session?.token, resultado]);
 
   const level = toResultsDisplayLevel(resultado?.nombre_nivel);
   const config = getResultsDisplayConfig(level);
-  const prob = resultado ? Math.round(parseFloat(resultado.probabilidad ?? "0") * 100) : 0;
+  const probRaw = resultado ? parseFloat(resultado.probabilidad ?? "0") * 100 : 0;
+  const prob = Number.isFinite(probRaw) ? Math.round(probRaw) : 0;
 
   return (
     <PageShell>
@@ -97,7 +105,7 @@ export default function EvaluationResultsPage() {
               </p>
             </div>
 
-            <div className="space-y-5 px-6 pb-8 sm:px-8">
+            <div className="space-y-6 px-6 pb-8 sm:px-8">
               {loading ? (
                 <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-600">
                   Cargando resultados...
@@ -124,23 +132,25 @@ export default function EvaluationResultsPage() {
                 </div>
               )}
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <StatCard value="9" label="Preguntas respondidas" />
-                <StatCard value={`${prob}%`} label="Estimación de riesgo" />
+                <StatCard value={`${prob}%`} label="Confianza del modelo" hint="Confianza de la clasificación obtenida" />
                 <StatCard value="PLN" label="Análisis de texto" />
               </div>
 
-              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_10px_20px_rgba(2,6,23,0.04)]">
-                <div className="flex items-start gap-2">
-                  <span className="mt-0.5 text-blue-600">
+              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_10px_20px_rgba(2,6,23,0.04)] sm:p-6">
+                <div className="flex items-start gap-3">
+                  <span className="mt-0.5 grid h-8 w-8 flex-none place-items-center rounded-lg bg-blue-50 text-blue-600">
                     <IconInfo className="h-4 w-4" />
                   </span>
-                  <div>
-                    <p className="text-xs font-semibold text-slate-900">¿Qué significa esto?</p>
-                    <p className="mt-2 text-xs leading-5 text-slate-600">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-slate-900">¿Qué significa esto?</p>
+                    <p className="mt-2 text-xs leading-relaxed text-slate-600 sm:text-sm sm:leading-relaxed">
                       Esta evaluación se basa en herramientas validadas como el PHQ-9 combinadas
-                      con análisis de procesamiento de lenguaje natural. Los resultados son
-                      orientativos y deben ser complementados con una evaluación profesional.
+                      con análisis de procesamiento de lenguaje natural. El porcentaje de confianza
+                      refleja la certeza del modelo en la clasificación, no el riesgo en sí. Los
+                      resultados son orientativos y deben ser complementados con una evaluación
+                      profesional.
                     </p>
                   </div>
                 </div>
@@ -160,11 +170,22 @@ export default function EvaluationResultsPage() {
   );
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
+function StatCard({
+  value,
+  label,
+  hint,
+}: {
+  value: string;
+  label: string;
+  hint?: string;
+}) {
   return (
-    <div className="rounded-2xl border border-slate-200/70 bg-slate-50/70 px-3 py-3 text-center">
-      <p className="text-sm font-semibold text-indigo-700">{value}</p>
-      <p className="mt-0.5 text-[11px] text-slate-500">{label}</p>
+    <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-slate-200/70 bg-slate-50/70 px-4 py-3.5 text-center">
+      <p className="text-base font-semibold text-indigo-700">{value}</p>
+      <p className="mt-1 text-[11px] font-medium leading-snug text-slate-600">{label}</p>
+      {hint && (
+        <p className="mt-1 text-[10px] leading-relaxed text-slate-400">{hint}</p>
+      )}
     </div>
   );
 }

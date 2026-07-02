@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuthSession } from "../../../contexts/auth-session";
 import { EvaluationErrorBanner } from "../../../components/evaluation-error-banner";
 import { journalApi, ApiError } from "../../../lib/api";

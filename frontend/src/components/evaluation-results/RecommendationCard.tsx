@@ -21,13 +21,15 @@ export function RecommendationCard({ config }: RecommendationCardProps) {
         boxShadow: config.shadow,
       }}
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3.5 sm:gap-4">
         <div className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-white/20 text-white ring-1 ring-white/25">
           <IconLightbulb className="h-5 w-5" />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold text-white">{rec.title}</p>
-          <p className="mt-2 text-xs leading-6 text-white/90 sm:text-sm">{rec.description}</p>
+          <p className="text-sm font-bold leading-snug text-white">{rec.title}</p>
+          <p className="mt-2 text-xs leading-[1.65] text-white/90 sm:text-sm sm:leading-[1.7]">
+            {rec.description}
+          </p>
 
           {rec.external ? (
             <a href={rec.buttonHref} className={buttonClass}>

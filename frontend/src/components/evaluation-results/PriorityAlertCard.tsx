@@ -5,11 +5,11 @@ export function PriorityAlertCard() {
         <div className="grid h-12 w-12 flex-none place-items-center rounded-xl bg-[#EF4444] text-white shadow-[0_8px_20px_rgba(239,68,68,0.35)]">
           <IconAlert className="h-6 w-6" />
         </div>
-        <div>
+        <div className="min-w-0 flex-1">
           <p className="text-base font-extrabold uppercase tracking-wide text-[#B91C1C] sm:text-lg">
             Atención prioritaria
           </p>
-          <p className="mt-3 text-sm leading-7 font-medium text-[#991B1B] sm:text-base">
+          <p className="mt-2.5 text-sm leading-[1.7] font-medium text-[#991B1B] sm:text-base">
             Los resultados obtenidos indican un nivel alto de riesgo. Se recomienda contactar
             inmediatamente con el servicio de consejería universitaria o con un profesional de
             salud mental para recibir orientación especializada.

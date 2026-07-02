@@ -1,4 +1,6 @@
 import { getRecommendationCardStyle } from "../../lib/recommendation-card-styles";
+import { isEmergencyResource } from "../../lib/resource-display";
+import { ResourceContent } from "./ResourceContent";
 
 type RecommendationItemCardProps = {
   title: string;
@@ -19,11 +21,13 @@ export function RecommendationItemCard({
 }: RecommendationItemCardProps) {
   const style = getRecommendationCardStyle(index);
   const Icon = ICONS[index % ICONS.length];
+  const isEmergency = isEmergencyResource(title);
 
   return (
     <article
       className={[
-        "group relative overflow-hidden rounded-2xl border bg-gradient-to-br p-5 transition duration-300 hover:-translate-y-0.5",
+        "group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-gradient-to-br transition duration-300 hover:-translate-y-0.5",
+        isEmergency ? "p-5 sm:p-6" : "p-4 sm:p-5",
         style.gradient,
         style.border,
         style.shadow,
@@ -31,26 +35,38 @@ export function RecommendationItemCard({
     >
       <div className="pointer-events-none absolute -right-4 -top-4 h-16 w-16 rounded-full bg-white/40 blur-xl transition group-hover:bg-white/60" />
 
-      <div className="relative flex items-start gap-3">
+      <div
+        className={[
+          "relative flex flex-1 gap-3.5",
+          isEmergency ? "flex-col items-center text-center" : "items-start",
+        ].join(" ")}
+      >
         <div
           className={[
-            "grid h-11 w-11 flex-none place-items-center rounded-xl shadow-md",
+            "grid h-10 w-10 flex-none place-items-center rounded-xl shadow-md sm:h-11 sm:w-11",
             style.iconBg,
             style.iconColor,
+            isEmergency ? "mx-auto" : "",
           ].join(" ")}
         >
           <Icon className="h-5 w-5" />
         </div>
-        <div className="min-w-0 flex-1">
-          <h3 className="text-sm font-bold text-slate-900">{title}</h3>
-          <p className="mt-2 text-xs leading-6 text-slate-600 sm:text-sm">{description}</p>
+
+        <div className={["min-w-0 flex-1", isEmergency ? "w-full" : ""].join(" ")}>
+          <h3 className="text-sm font-bold leading-snug text-slate-900">{title}</h3>
+          <p
+            className={[
+              "mt-1.5 text-xs leading-[1.65] text-slate-600 sm:text-sm sm:leading-[1.7]",
+              isEmergency ? "mx-auto max-w-sm" : "",
+            ].join(" ")}
+          >
+            {description}
+          </p>
           {subtitle && (
-            <p className="mt-1 text-xs italic leading-5 text-slate-500">{subtitle}</p>
+            <p className="mt-1.5 text-xs italic leading-[1.6] text-slate-500">{subtitle}</p>
           )}
           {resources && (
-            <p className={["mt-3 whitespace-pre-line text-xs font-semibold leading-5", style.accent].join(" ")}>
-              {resources}
-            </p>
+            <ResourceContent title={title} resources={resources} accent={style.accent} />
           )}
         </div>
       </div>

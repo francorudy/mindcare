@@ -75,7 +75,6 @@ export default function AdminDashboardPage() {
             <CounselorProfileCard name={session.name} />
             <div className="flex items-center gap-2">
               <CounselorNotificationBell
-                token={session.token}
                 pendientes={pendientes}
                 alertas={alertas}
                 onMarkReviewed={marcarRevisado}

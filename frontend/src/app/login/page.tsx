@@ -12,7 +12,6 @@ export default function LoginPage() {
 
   const [role, setRole] = useState<"student" | "counselor">("student");
   const [prefillEmail, setPrefillEmail] = useState("");
-  const [prefillName, setPrefillName] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [didLogin, setDidLogin] = useState(false);
@@ -33,7 +32,6 @@ export default function LoginPage() {
         role?: "student" | "counselor";
       };
       if (parsed.email) setPrefillEmail(parsed.email);
-      if (parsed.name) setPrefillName(parsed.name);
       if (parsed.role === "student" || parsed.role === "counselor") {
         setRole(parsed.role);
       }
@@ -56,17 +54,8 @@ export default function LoginPage() {
     setLoading(true);
   try {
       const tipo = role === "counselor" ? "consejero" : "estudiante";
-      //const data = await authApi.login({ email, password, tipo });
-  let data;
-
-  try {
-    data = await authApi.login({ email, password, tipo });
-  } catch (error) {
-    // Esperar 5 segundos
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    // Segundo intento
-    data = await authApi.login({ email, password, tipo });
-  }
+      const data = await authApi.login({ email, password, tipo });
+  
       const session = buildSession(data.usuario, data.rol, data.access_token);
       setSession(session);
 

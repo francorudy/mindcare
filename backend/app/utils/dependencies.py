@@ -29,8 +29,13 @@ def get_current_user(
     if not user_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token sin usuario")
 
+    try:
+        user_id_int = int(user_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token inválido o expirado")
+
     user = db.query(Usuario).filter(
-        Usuario.id_usuario == int(user_id),
+        Usuario.id_usuario == user_id_int,
         Usuario.estado == "A",
     ).first()
     if not user:

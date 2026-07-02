@@ -39,9 +39,11 @@ export function ResultCard({ config, probability, modelLabel }: ResultCardProps)
 
         <p className="mt-4 max-w-prose text-sm leading-6 text-white/90">{config.hint}</p>
 
-        <div className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-white/20 px-4 py-2.5 ring-1 ring-white/25 backdrop-blur-sm">
-          <span className="text-2xl font-bold text-white">{probability}%</span>
-          <span className="text-xs font-medium text-white/85">estimación de riesgo</span>
+        <div className="mt-6 inline-flex flex-col rounded-2xl bg-white/20 px-4 py-2.5 ring-1 ring-white/25 backdrop-blur-sm">
+          <span className="text-[11px] font-semibold uppercase tracking-wide text-white/80">
+            Confianza del modelo
+          </span>
+          <span className="mt-0.5 text-2xl font-bold text-white">{probability}%</span>
         </div>
       </div>
     </section>

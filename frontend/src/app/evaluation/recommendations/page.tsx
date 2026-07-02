@@ -46,16 +46,24 @@ export default function EvaluationRecommendationsPage() {
       return;
     }
 
+    let cancelled = false;
+
     recomendacionApi
       .obtener(session.token, Number(idRaw))
       .then((data) => {
+        if (cancelled) return;
         setAcciones(data);
         setLoading(false);
       })
       .catch((err) => {
+        if (cancelled) return;
         setError(err instanceof ApiError ? err.message : "Error al cargar recomendaciones.");
         setLoading(false);
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [session, isHydrated]);
 
   return (
@@ -93,7 +101,7 @@ export default function EvaluationRecommendationsPage() {
                 <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Acciones sugeridas para ti
                 </p>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid items-stretch gap-4 sm:grid-cols-2">
                   {config.recommendations.map((rec, idx) => (
                     <RecommendationItemCard
                       key={rec.title}
@@ -121,7 +129,7 @@ export default function EvaluationRecommendationsPage() {
                   <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
                     Recursos adicionales
                   </p>
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid items-stretch gap-4 sm:grid-cols-2">
                     {acciones.map((accion, idx) => (
                       <RecommendationItemCard
                         key={accion.id_accion_recomendada}

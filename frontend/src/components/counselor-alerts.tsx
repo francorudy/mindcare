@@ -81,7 +81,6 @@ export function useCounselorAlerts({ token, enabled = true }: UseCounselorAlerts
 }
 
 type CounselorNotificationBellProps = {
-  token: string;
   pendientes: number;
   alertas: AlertaNotificacionOut[];
   onMarkReviewed: (id_alerta: number) => void;
@@ -89,7 +88,6 @@ type CounselorNotificationBellProps = {
 };
 
 export function CounselorNotificationBell({
-  token,
   pendientes,
   alertas,
   onMarkReviewed,

@@ -78,10 +78,9 @@ export default function RegisterPage() {
 
     setLoading(true);
     setServerError(null);
-try {
-  let usuario;
+
   try{
-    usuario = await authApi.register({
+    const usuario = await authApi.register({
     nombres: values.nombres.trim(),
     apellidos: values.apellidos.trim(),
     email: values.email.trim(),
@@ -91,21 +90,7 @@ try {
     telefono: values.telefono || undefined,
     id_rol: ROL_ID[role],
   });
-} catch (error) {
-  // Esperar 5 segundos
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  // Segundo intento
-    usuario = await authApi.register({
-    nombres: values.nombres.trim(),
-    apellidos: values.apellidos.trim(),
-    email: values.email.trim(),
-    password: values.password,
-    fecha_nacimiento: values.fechaNacimiento || undefined,
-    genero: values.genero || undefined,
-    telefono: values.telefono || undefined,
-    id_rol: ROL_ID[role],
-  });
-}
+  
     // Precarga el email en la página de login
     window.localStorage.setItem(
       REGISTER_PREFILL_KEY,
@@ -116,6 +101,7 @@ try {
       }),
     );
       setDidSucceed(true);
+      
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.status === 0) {

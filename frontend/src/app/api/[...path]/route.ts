@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = "https://mindcare-api-mwlv.onrender.com";
+const BACKEND_URL = "http://localhost:8000";
 const PROXY_TIMEOUT_MS = 45_000;
 
 const HOP_BY_HOP = new Set([
@@ -79,6 +79,7 @@ async function proxyRequest(req: NextRequest) {
 type RouteContext = { params: Promise<{ path: string[] }> };
 
 async function handle(req: NextRequest, _context: RouteContext) {
+  void _context;
   return proxyRequest(req);
 }
 
